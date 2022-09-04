@@ -13,22 +13,27 @@ const NewBoard = () => {
   const onHandleDrop = (e, cardHeader) => {
     e.preventDefault();
     e.stopPropagation();
-    var data = JSON.parse(e.dataTransfer.getData("text"));
-    console.log("dropped", data, cardHeader,inProgress);
+    let data = JSON.parse(e.dataTransfer.getData("text"));
+   
     if (data.previousParent !== cardHeader) {
       //Prevent cards from being duplicated in a column
 
       if (data.previousParent === "inProgress") {
+    
+        axios.delete(`http://localhost:5000/kanbanboard/inprogress/${data?.id}`).then(res=>res.data).catch(error=>console.log(error))
         setInProgress(inProgress.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "pending") {
+        axios.delete(`http://localhost:5000/kanbanboard/${data?.id}`).then(res=>res.data).catch(error=>console.log(error))
         setPending(pending.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "done") {
         setCompleted(completed.filter((item) => item.id !== data.id));
       }
 
       if (cardHeader === "pending") {
+         axios.post("http://localhost:5000/kanbanboard", data).then((res) => res.data).catch((error) => console.log(error));
         setPending(pending.concat(data));
       } else if (cardHeader === "inProgress") {
+        axios.post('http://localhost:5000/kanbanboard/inprogress',data).then(res=>res.data).catch(error=>console.log(error));
         setInProgress(inProgress.concat(data));
       } else if (cardHeader === "done") {
         setCompleted(completed.concat(data));
@@ -63,15 +68,16 @@ const NewBoard = () => {
 
 useEffect(()=>{
   const readData = async () => {
-    const data = await axios.get("http://localhost:5000/kanbanboard").then(res=>res.data).catch(error=>console.log(error))
-  
-    setPending(data);
+    const pendingData = await axios.get("http://localhost:5000/kanbanboard").then(res=>res.data).catch(error=>console.log(error))
+    const inprogressData=  await axios.get("http://localhost:5000/kanbanboard/inprogress").then(res=>res.data).catch(error=>console.log(error))
+    setPending(pendingData);
+    setInProgress(inprogressData)
   }
   readData()
 
 
 },[inputText])
-
+console.log(pending)
   return (
     <div style={{marginTop:'40px'}}>
       <div style={{textAlign:'center'}}>
