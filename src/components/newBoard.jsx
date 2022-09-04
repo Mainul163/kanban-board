@@ -5,8 +5,7 @@ import axios from 'axios';
 
 const NewBoard = () => {
   const [pending, setPending] = useState([
-    { id: 1, title: "Add new user type" },
-    { id: 5, title: "Remove header" },
+   
   ]);
   const [inProgress, setInProgress] = useState([]);
   const [completed, setCompleted] = useState([]);
@@ -17,7 +16,7 @@ const NewBoard = () => {
     e.preventDefault();
     e.stopPropagation();
     var data = JSON.parse(e.dataTransfer.getData("text"));
-    console.log("dropped", data, cardHeader);
+    console.log("dropped", data, cardHeader,inProgress);
     if (data.previousParent !== cardHeader) {
       //Prevent cards from being duplicated in a column
 
@@ -43,13 +42,13 @@ const NewBoard = () => {
  
   const submission = async (e) => {
     e.preventDefault();
-    let tempPending = [...pending];
-    tempPending.push({ id: tempPending.length + 1, title: inputText });
-    setPending(tempPending);
-    setInputText("");
-    const task = inputText;
+    // let tempPending = [...pending];
+    // tempPending.push({ id: tempPending.length + 1, title: inputText });
+    // setPending(tempPending);
+    // setInputText("");
+    const task = { id: pending.length + 1, title: inputText };
 
-    const taskInput = { task };
+    const taskInput =  task ;
     await axios
       .post("http://localhost:5000/kanbanboard", taskInput)
       .then((res) => res.data)
@@ -59,19 +58,22 @@ const NewBoard = () => {
     console.log("event, card, parent==>", event, card, parent);
   };
 
-  const readData = async () => {
-    // const data = await axios.get("http://localhost:5000/kanbanboard").then(res=>res.data).catch(error=>console.log(error))
-    // setPending(data);
-  }
 useEffect(()=>{
+
+
+  
+  const readData = async () => {
+    const data = await axios.get("http://localhost:5000/kanbanboard").then(res=>res.data).catch(error=>console.log(error))
+    setPending(data);
+  }
   readData()
 
 
-},[pending])
+},[])
 
   return (
-    <>
-      <div>
+    <div style={{marginTop:'40px'}}>
+      <div style={{textAlign:'center'}}>
         <form onSubmit={submission}>
           <input
             type="text"
@@ -79,10 +81,11 @@ useEffect(()=>{
             placeholder={"Enter task..."}
             onChange={(event) => setInputText(event.target.value)}
             autoFocus
+            style={{padding:"10px 20px"}}
           />
-          <div className="editable_edit_footer">
-            <button type="submit">Add</button>
-          </div>
+          
+            <button type="submit" style={{padding:"10px 20px",marginLeft:'10px'}}>Add</button>
+         
         </form>
       </div>
 
@@ -116,7 +119,7 @@ useEffect(()=>{
           name={order[2]}
         ></Column>
       </div>
-    </>
+    </div>
   );
 };
 
