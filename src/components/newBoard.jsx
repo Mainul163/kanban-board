@@ -4,37 +4,57 @@ import Column from "./newColumn";
 import axios from "axios";
 
 const NewBoard = () => {
-  const [pending, setPending] = useState([
-    { id: 1, title: "Add new user type" },
-    { id: 5, title: "Remove header" },
-  ]);
+  const [pending, setPending] = useState([]);
   const [inProgress, setInProgress] = useState([]);
   const [completed, setCompleted] = useState([]);
-  const [order, setOrder] = useState(["pending", "inProgress", "completed"]);
+  const [order, setOrder] = useState(["pending", "inProgress", "done"]);
   const [inputText, setInputText] = useState("");
 
   const onHandleDrop = (e, cardHeader) => {
     e.preventDefault();
     e.stopPropagation();
     let data = JSON.parse(e.dataTransfer.getData("text"));
-    console.log("dropped", data, cardHeader, e);
+
     if (data.previousParent !== cardHeader) {
       //Prevent cards from being duplicated in a column
 
       if (data.previousParent === "inProgress") {
-        console.log(inProgress, "inpro", data);
+        axios
+          .delete(`http://localhost:5000/kanbanboard/inprogress/${data?.id}`)
+          .then((res) => res.data)
+          .catch((error) => console.log(error));
         setInProgress(inProgress.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "pending") {
+        axios
+          .delete(`http://localhost:5000/kanbanboard/${data?.id}`)
+          .then((res) => res.data)
+          .catch((error) => console.log(error));
         setPending(pending.filter((item) => item.id !== data.id));
-      } else if (data.previousParent === "completed") {
+      } else if (data.previousParent === "done") {
+        axios
+          .delete(`http://localhost:5000/done/${data?.id}`)
+          .then((res) => res.data)
+          .catch((error) => console.log(error));
         setCompleted(completed.filter((item) => item.id !== data.id));
       }
 
       if (cardHeader === "pending") {
+        axios
+          .post("http://localhost:5000/kanbanboard", data)
+          .then((res) => res.data)
+          .catch((error) => console.log(error));
         setPending(pending.concat(data));
       } else if (cardHeader === "inProgress") {
+        axios
+          .post("http://localhost:5000/kanbanboard/inprogress", data)
+          .then((res) => res.data)
+          .catch((error) => console.log(error));
         setInProgress(inProgress.concat(data));
-      } else if (cardHeader === "completed") {
+      } else if (cardHeader === "done") {
+        axios
+          .post("http://localhost:5000/kanbanboard/done", data)
+          .then((res) => res.data)
+          .catch((error) => console.log(error));
         setCompleted(completed.concat(data));
       }
     }
@@ -44,36 +64,53 @@ const NewBoard = () => {
 
   const submission = async (e) => {
     e.preventDefault();
-    let tempPending = [...pending];
-    tempPending.push({ id: tempPending.length + 1, title: inputText });
-    setPending(tempPending);
-    setInputText("");
-    const task = inputText;
 
-    const taskInput = { task };
-    await axios
-      .post("http://localhost:5000/kanbanboard", taskInput)
-      .then((res) => res.data)
-      .catch((error) => console.log(error));
+    setInputText("");
+    let maxNumber = 45563000;
+    let randomNumber = Math.floor(Math.random() * maxNumber + 1);
+
+    const task = { id: randomNumber + 1, title: inputText };
+
+    if (task.title === "") {
+      alert("please fill up the input field");
+    } else {
+      const taskInput = task;
+      await axios
+        .post("http://localhost:5000/kanbanboard", taskInput)
+        .then((res) => res.data)
+        .catch((error) => console.log(error));
+    }
   };
   const onCardBlur = (event, card, parent) => {
-    console.log("event, card, parent==>", event, card, parent);
+    // console.log("event, card, parent==>", event, card, parent);
   };
 
-  const readData = async () => {
-    // const data = await axios
-    //   .get("http://localhost:5000/kanbanboard")
-    //   .then((res) => res.data)
-    //   .catch((error) => console.log(error));
-    // setPending(data);
-  };
   useEffect(() => {
+    const readData = async () => {
+      const pendingData = await axios
+        .get("http://localhost:5000/kanbanboard")
+        .then((res) => res.data)
+        .catch((error) => console.log(error));
+      const inprogressData = await axios
+        .get("http://localhost:5000/kanbanboard/inprogress")
+        .then((res) => res.data)
+        .catch((error) => console.log(error));
+
+      const done = await axios
+        .get("http://localhost:5000/kanbanboard/done")
+        .then((res) => res.data)
+        .catch((error) => console.log(error));
+
+      setPending(pendingData);
+      setInProgress(inprogressData);
+      setCompleted(done);
+    };
     readData();
-  }, [pending]);
-  console.log("teast");
+  }, [inputText]);
+
   return (
-    <>
-      <div>
+    <div style={{ marginTop: "40px" }}>
+      <div style={{ textAlign: "center" }}>
         <form onSubmit={submission}>
           <input
             type="text"
@@ -81,10 +118,15 @@ const NewBoard = () => {
             placeholder={"Enter task..."}
             onChange={(event) => setInputText(event.target.value)}
             autoFocus
+            style={{ padding: "10px 20px" }}
           />
-          <div className="editable_edit_footer">
-            <button type="submit">Add</button>
-          </div>
+
+          <button
+            type="submit"
+            style={{ padding: "10px 20px", marginLeft: "10px" }}
+          >
+            Add
+          </button>
         </form>
       </div>
 
@@ -118,7 +160,7 @@ const NewBoard = () => {
           name={order[2]}
         ></Column>
       </div>
-    </>
+    </div>
   );
 };
 
