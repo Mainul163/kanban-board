@@ -18,7 +18,7 @@ const NewColumn = (props) => {
   const capitalizeFirstLetter = (string) => {
     return string.replace(string[0], string[0].toUpperCase());
   };
-  console.log('props',props);
+
   return (
     <div
       className="column drag-and-drop"

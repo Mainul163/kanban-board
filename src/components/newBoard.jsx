@@ -1,7 +1,7 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import Column from "./newColumn";
-import axios from 'axios';
+import axios from "axios";
 
 const NewBoard = () => {
   const [pending, setPending] = useState([
@@ -16,12 +16,13 @@ const NewBoard = () => {
   const onHandleDrop = (e, cardHeader) => {
     e.preventDefault();
     e.stopPropagation();
-    var data = JSON.parse(e.dataTransfer.getData("text"));
-    console.log("dropped", data, cardHeader);
+    let data = JSON.parse(e.dataTransfer.getData("text"));
+    console.log("dropped", data, cardHeader, e);
     if (data.previousParent !== cardHeader) {
       //Prevent cards from being duplicated in a column
 
       if (data.previousParent === "inProgress") {
+        console.log(inProgress, "inpro", data);
         setInProgress(inProgress.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "pending") {
         setPending(pending.filter((item) => item.id !== data.id));
@@ -40,7 +41,7 @@ const NewBoard = () => {
   };
 
   const onNavClick = (event, card, parentCategory) => {};
- 
+
   const submission = async (e) => {
     e.preventDefault();
     let tempPending = [...pending];
@@ -60,15 +61,16 @@ const NewBoard = () => {
   };
 
   const readData = async () => {
-    // const data = await axios.get("http://localhost:5000/kanbanboard").then(res=>res.data).catch(error=>console.log(error))
+    // const data = await axios
+    //   .get("http://localhost:5000/kanbanboard")
+    //   .then((res) => res.data)
+    //   .catch((error) => console.log(error));
     // setPending(data);
-  }
-useEffect(()=>{
-  readData()
-
-
-},[pending])
-
+  };
+  useEffect(() => {
+    readData();
+  }, [pending]);
+  console.log("teast");
   return (
     <>
       <div>
