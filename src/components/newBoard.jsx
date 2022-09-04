@@ -49,7 +49,7 @@ const NewBoard = () => {
     setInputText("");
     let maxNumber = 45563000;
     let randomNumber = Math.floor((Math.random() * maxNumber) + 1);
-    console.log(randomNumber);
+ 
     const task = { id: randomNumber + 1, title: inputText };
   
     if(task.title===''){
