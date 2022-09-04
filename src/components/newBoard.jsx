@@ -47,9 +47,11 @@ const NewBoard = () => {
     e.preventDefault();
    
     setInputText("");
+    let maxNumber = 45563000;
+    let randomNumber = Math.floor((Math.random() * maxNumber) + 1);
+    console.log(randomNumber);
+    const task = { id: randomNumber + 1, title: inputText };
   
-    const task = { id: pending.length + 1, title: inputText };
-    console.log(task);
     if(task.title===''){
       alert('please fill up the input field')
     }else{
@@ -77,7 +79,7 @@ useEffect(()=>{
 
 
 },[inputText])
-console.log(pending)
+
   return (
     <div style={{marginTop:'40px'}}>
       <div style={{textAlign:'center'}}>
