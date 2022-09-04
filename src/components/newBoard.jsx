@@ -4,12 +4,10 @@ import Column from "./newColumn";
 import axios from 'axios';
 
 const NewBoard = () => {
-  const [pending, setPending] = useState([
-   
-  ]);
+  const [pending, setPending] = useState([]);
   const [inProgress, setInProgress] = useState([]);
   const [completed, setCompleted] = useState([]);
-  const [order, setOrder] = useState(["pending", "inProgress", "completed"]);
+  const [order, setOrder] = useState(["pending", "inProgress", "done"]);
   const [inputText, setInputText] = useState("");
 
   const onHandleDrop = (e, cardHeader) => {
@@ -24,7 +22,7 @@ const NewBoard = () => {
         setInProgress(inProgress.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "pending") {
         setPending(pending.filter((item) => item.id !== data.id));
-      } else if (data.previousParent === "completed") {
+      } else if (data.previousParent === "done") {
         setCompleted(completed.filter((item) => item.id !== data.id));
       }
 
@@ -32,7 +30,7 @@ const NewBoard = () => {
         setPending(pending.concat(data));
       } else if (cardHeader === "inProgress") {
         setInProgress(inProgress.concat(data));
-      } else if (cardHeader === "completed") {
+      } else if (cardHeader === "done") {
         setCompleted(completed.concat(data));
       }
     }
@@ -42,34 +40,37 @@ const NewBoard = () => {
  
   const submission = async (e) => {
     e.preventDefault();
-    // let tempPending = [...pending];
-    // tempPending.push({ id: tempPending.length + 1, title: inputText });
-    // setPending(tempPending);
-    // setInputText("");
+   
+    setInputText("");
+  
     const task = { id: pending.length + 1, title: inputText };
-
-    const taskInput =  task ;
-    await axios
+    console.log(task);
+    if(task.title===''){
+      alert('please fill up the input field')
+    }else{
+      const taskInput =  task ;
+        await axios
       .post("http://localhost:5000/kanbanboard", taskInput)
       .then((res) => res.data)
       .catch((error) => console.log(error));
+    }
+   
+  
   };
   const onCardBlur = (event, card, parent) => {
-    console.log("event, card, parent==>", event, card, parent);
+    // console.log("event, card, parent==>", event, card, parent);
   };
 
 useEffect(()=>{
-
-
-  
   const readData = async () => {
     const data = await axios.get("http://localhost:5000/kanbanboard").then(res=>res.data).catch(error=>console.log(error))
+  
     setPending(data);
   }
   readData()
 
 
-},[])
+},[inputText])
 
   return (
     <div style={{marginTop:'40px'}}>
