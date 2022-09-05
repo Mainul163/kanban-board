@@ -26,6 +26,12 @@ A simple kanban board built with React & Node Js
 - After clone the code from the github repositorie have to install npm i in terminal
 - To run in the browser need to npm start
 
+## How to run Backhand 
+
+- After clone the code from the github repositorie have to install npm i in terminal
+- To run in the browser need to npm run dev
+- and port number 5000
+
 In the project directory, you can run:
 
 `yarn start`
