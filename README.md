@@ -1,8 +1,8 @@
 # Kanban Board
 
-A simple kanban board built with React
+A simple kanban board built with React & Node Js
 
-- automatically saves application state to localStorage so users can refresh the page without losing data
+- automatically saves application database to sate so users can refresh the page without losing data
 - drag and drop functionality for the cards
 
 ## [Demo](http://kanban-react.surge.sh)
