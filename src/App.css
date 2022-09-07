@@ -1,6 +1,6 @@
 body {
-  background: linear-gradient(#3eb9de, #3a80de);
-  background: linear-gradient(#3a80de, #3eb9de);
+  background: #282c34;
+ 
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -79,7 +79,7 @@ body {
 
 .orange {
   color: #ffffff;
-  background-color: #6717E;
+ 
 }
 
 svg[class*="fa-caret"] {

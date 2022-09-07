@@ -8937,7 +8937,7 @@
     "strip-ansi" "6.0.0"
     "text-table" "0.2.0"
 
-"react-dom@*", "react-dom@^16.13.1":
+"react-dom@*", "react-dom@^16.0.0 || ^17.0.0 || ^18.0.0", "react-dom@^16.13.1":
   "integrity" "sha512-81PIMmVLnCNLO/fFOQxdQkvEq/+Hfpv24XNJfpyZhTRfO0QcmQIF/PgCa1zCOj2w1hrn12MFLyaJ/G0+Mxtfag=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-16.13.1.tgz"
   "version" "16.13.1"
@@ -9024,7 +9024,12 @@
   optionalDependencies:
     "fsevents" "2.1.2"
 
-"react@*", "react@^16.13.1", "react@>=0.12.0", "react@>=16.x":
+"react-spinners@^0.13.4":
+  "integrity" "sha512-V6IURjYOwomhdngMfuVxBp4utCF6v21sjQ6r4K2JoKl8fwXZp1UeHMBLf+2SU+cts8hAVj9rHOJ8kdT5UqqaJw=="
+  "resolved" "https://registry.npmjs.org/react-spinners/-/react-spinners-0.13.4.tgz"
+  "version" "0.13.4"
+
+"react@*", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.13.1", "react@>=0.12.0", "react@>=16.x":
   "integrity" "sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.13.1.tgz"
   "version" "16.13.1"
@@ -10701,6 +10706,11 @@
   "integrity" "sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c="
   "resolved" "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   "version" "0.0.6"
+
+"typescript@^3.2.1", "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta":
+  "integrity" "sha512-w6fIxVE/H1PkLKcCPsFqKE7Kv7QUwhU8qQY2MueZXWx5cPZdwFupLgKK3vntcK98BtNHZtAF4LA/yl2a7k8R6Q=="
+  "resolved" "https://registry.npmjs.org/typescript/-/typescript-3.9.10.tgz"
+  "version" "3.9.10"
 
 "unicode-canonical-property-names-ecmascript@^1.0.4":
   "integrity" "sha512-jDrNnXWHd4oHiTZnx/ZG7gtUTVp+gCcTTKr8L0HjlwphROEW3+Him+IpvC+xcJEFegapiMZyZe02CyuOnRmbnQ=="

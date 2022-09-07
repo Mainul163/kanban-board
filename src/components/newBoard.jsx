@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect, CSSProperties } from "react";
+import HashLoader from "react-spinners/HashLoader";
 import Column from "./newColumn";
 import axios from "axios";
 
@@ -9,6 +9,13 @@ const NewBoard = () => {
   const [completed, setCompleted] = useState([]);
   const [order, setOrder] = useState(["pending", "inProgress", "done"]);
   const [inputText, setInputText] = useState("");
+  let [loading, setLoading] = useState(true);
+  let [color, setColor] = useState("#36d7b7");
+  const override: CSSProperties = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
+  };
 
   const onHandleDrop = (e, cardHeader) => {
     e.preventDefault();
@@ -20,19 +27,19 @@ const NewBoard = () => {
 
       if (data.previousParent === "inProgress") {
         axios
-          .delete(`http://localhost:5000/kanbanboard/inprogress/${data?.id}`)
+          .delete(`https://obscure-sierra-89518.herokuapp.com/kanbanboard/inprogress/${data?.id}`)
           .then((res) => res.data)
           .catch((error) => console.log(error));
         setInProgress(inProgress.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "pending") {
         axios
-          .delete(`http://localhost:5000/kanbanboard/${data?.id}`)
+          .delete(`https://obscure-sierra-89518.herokuapp.com/kanbanboard/${data?.id}`)
           .then((res) => res.data)
           .catch((error) => console.log(error));
         setPending(pending.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "done") {
         axios
-          .delete(`http://localhost:5000/done/${data?.id}`)
+          .delete(`https://obscure-sierra-89518.herokuapp.com/done/${data?.id}`)
           .then((res) => res.data)
           .catch((error) => console.log(error));
         setCompleted(completed.filter((item) => item.id !== data.id));
@@ -40,19 +47,19 @@ const NewBoard = () => {
 
       if (cardHeader === "pending") {
         axios
-          .post("http://localhost:5000/kanbanboard", data)
+          .post("https://obscure-sierra-89518.herokuapp.com/kanbanboard", data)
           .then((res) => res.data)
           .catch((error) => console.log(error));
         setPending(pending.concat(data));
       } else if (cardHeader === "inProgress") {
         axios
-          .post("http://localhost:5000/kanbanboard/inprogress", data)
+          .post("https://obscure-sierra-89518.herokuapp.com/kanbanboard/inprogress", data)
           .then((res) => res.data)
           .catch((error) => console.log(error));
         setInProgress(inProgress.concat(data));
       } else if (cardHeader === "done") {
         axios
-          .post("http://localhost:5000/kanbanboard/done", data)
+          .post("https://obscure-sierra-89518.herokuapp.com/kanbanboard/done", data)
           .then((res) => res.data)
           .catch((error) => console.log(error));
         setCompleted(completed.concat(data));
@@ -65,7 +72,7 @@ const NewBoard = () => {
   const submission = async (e) => {
     e.preventDefault();
 
-    setInputText("");
+  
     let maxNumber = 45563000;
     let randomNumber = Math.floor(Math.random() * maxNumber + 1);
 
@@ -76,10 +83,11 @@ const NewBoard = () => {
     } else {
       const taskInput = task;
       await axios
-        .post("http://localhost:5000/kanbanboard", taskInput)
+        .post("https://obscure-sierra-89518.herokuapp.com/kanbanboard", taskInput)
         .then((res) => res.data)
         .catch((error) => console.log(error));
     }
+    setInputText("");
   };
   const onCardBlur = (event, card, parent) => {
     // console.log("event, card, parent==>", event, card, parent);
@@ -88,16 +96,16 @@ const NewBoard = () => {
   useEffect(() => {
     const readData = async () => {
       const pendingData = await axios
-        .get("http://localhost:5000/kanbanboard")
+        .get("https://obscure-sierra-89518.herokuapp.com/kanbanboard")
         .then((res) => res.data)
         .catch((error) => console.log(error));
       const inprogressData = await axios
-        .get("http://localhost:5000/kanbanboard/inprogress")
+        .get("https://obscure-sierra-89518.herokuapp.com/kanbanboard/inprogress")
         .then((res) => res.data)
         .catch((error) => console.log(error));
 
       const done = await axios
-        .get("http://localhost:5000/kanbanboard/done")
+        .get("https://obscure-sierra-89518.herokuapp.com/kanbanboard/done")
         .then((res) => res.data)
         .catch((error) => console.log(error));
 
@@ -107,7 +115,7 @@ const NewBoard = () => {
     };
     readData();
   }, [inputText]);
-
+  console.log(pending.length,inProgress,completed);
   return (
     <div style={{ marginTop: "40px" }}>
       <div style={{ textAlign: "center" }}>
@@ -129,7 +137,10 @@ const NewBoard = () => {
           </button>
         </form>
       </div>
-
+      {
+        pending.length === 0 && inProgress.length === 0 && completed.length === 0 ? 
+     <div style={{marginTop:"180px"}}> <HashLoader color={color} loading={loading} cssOverride={override} size={150} /> <br /> <h1 style={{textAlign:"center",color:"#36d7b7"}}>Loading....</h1></div>:<>
+      
       <div className="board">
         <Column
           onHandleDrop={onHandleDrop}
@@ -160,6 +171,11 @@ const NewBoard = () => {
           name={order[2]}
         ></Column>
       </div>
+      
+      
+      </>
+      }
+    
     </div>
   );
 };
