@@ -24,7 +24,7 @@ A simple kanban board built with React & Node Js
 
 ### Deploy
 
-Frontend : Firebase
+Frontend : Firebase </br>
 Backend  : Heroku
 
 ## How to run Frontend ui
