@@ -38,14 +38,16 @@ const NewBoard = () => {
           .catch((error) => console.log(error));
         setPending(pending.filter((item) => item.id !== data.id));
       } else if (data.previousParent === "done") {
+        console.log('delete',data);
         axios
-          .delete(`https://obscure-sierra-89518.herokuapp.com/done/${data?.id}`)
+          .delete(`https://obscure-sierra-89518.herokuapp.com/kanbanboard/done/${data?.id}`)
           .then((res) => res.data)
           .catch((error) => console.log(error));
         setCompleted(completed.filter((item) => item.id !== data.id));
       }
 
       if (cardHeader === "pending") {
+        console.log('data',data);
         axios
           .post("https://obscure-sierra-89518.herokuapp.com/kanbanboard", data)
           .then((res) => res.data)
@@ -73,11 +75,11 @@ const NewBoard = () => {
     e.preventDefault();
 
 
-    let maxNumber = 45563000;
+    let maxNumber = 4556300078954;
     let randomNumber = Math.floor(Math.random() * maxNumber + 1);
 
     const task = { id: randomNumber + 1, title: inputText };
-
+  
     if (task.title === "") {
       alert("please fill up the input field");
     } else {

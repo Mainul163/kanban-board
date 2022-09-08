@@ -24,8 +24,7 @@ const NewColumn = (props) => {
       className="column drag-and-drop"
       onDrop={(e) => props.onHandleDrop(e, props.name)}
       onDragOver={(e) => handleDragOver(e)}
-      // onDragEnter={e => this.handleDragEnter(e)}
-      // onDragLeave={e => this.handleDragLeave(e)}
+    
     >
       <h4 className={[props.cardHeader, "column__header"].join(" ")}>
         {capitalizeFirstLetter(props.name)}
